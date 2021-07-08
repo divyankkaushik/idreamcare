@@ -63,120 +63,118 @@ class _LandingScreenState extends State<LandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            // Liquid swipe animation builder
-            LiquidSwipe.builder(
-              itemCount: data.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  color: data[index].color,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 20.0, top: 50.0, right: 20.0, bottom: 20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        // skip text on the top right
-                        (index == 3)
-                            ? Container(
-                                height: 10.0,
-                              )
-                            : Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  "skip",
-                                  style: TextStyle(
-                                      color: (index == 1)
-                                          ? AppColors.whiteColor
-                                          : AppColors.textGreyColor),
-                                ),
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          // Liquid swipe animation builder
+          LiquidSwipe.builder(
+            itemCount: data.length,
+            itemBuilder: (context, index) {
+              return Container(
+                color: data[index].color,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 20.0, top: 50.0, right: 20.0, bottom: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      // skip text on the top right
+                      (index == 3)
+                          ? Container(
+                              height: 10.0,
+                            )
+                          : Align(
+                              alignment: Alignment.centerRight,
+                              child: Text(
+                                "skip",
+                                style: TextStyle(
+                                    color: (index == 1)
+                                        ? AppColors.whiteColor
+                                        : AppColors.textGreyColor),
                               ),
-                        //image container
-                        Container(
-                          height: 280,
-                          width: 280,
-                          child: Image.asset(
-                            data[index].image,
-                            fit: BoxFit.contain,
-                          ),
+                            ),
+                      //image container
+                      Container(
+                        height: 280,
+                        width: 280,
+                        child: Image.asset(
+                          data[index].image,
+                          fit: BoxFit.contain,
                         ),
-                        Spacer(),
-                        // first heading text
-                        Text(
-                          data[index].text1,
+                      ),
+                      Spacer(),
+                      // first heading text
+                      Text(
+                        data[index].text1,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: (index == 0 || index == 2)
+                                ? AppColors.primaryBlueColor
+                                : AppColors.whiteColor),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      // second heading text with image
+                      Row(
+                        children: [
+                          Text(
+                            data[index].text2,
+                            style: TextStyle(
+                                fontSize: 42.0,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.darkBlueColor),
+                          ),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Container(
+                            height: 40,
+                            child: Image.asset(
+                              data[index].image2,
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Spacer(),
+                      // desccription text
+                      Container(
+                        width: 220,
+                        child: Text(
+                          data[index].text3,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                              wordSpacing: 4,
                               color: (index == 0 || index == 2)
-                                  ? AppColors.primaryBlueColor
+                                  ? AppColors.textGreyColor
                                   : AppColors.whiteColor),
                         ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        // second heading text with image
-                        Row(
-                          children: [
-                            Text(
-                              data[index].text2,
-                              style: TextStyle(
-                                  fontSize: 42.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.darkBlueColor),
-                            ),
-                            SizedBox(
-                              width: 5.0,
-                            ),
-                            Container(
-                              height: 40,
-                              child: Image.asset(
-                                data[index].image2,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Spacer(),
-                        // desccription text
-                        Container(
-                          width: 220,
-                          child: Text(
-                            data[index].text3,
-                            style: TextStyle(
-                                wordSpacing: 4,
-                                color: (index == 0 || index == 2)
-                                    ? AppColors.textGreyColor
-                                    : AppColors.whiteColor),
-                          ),
-                        ),
-                        Spacer(),
-                        // dots builder at the bottom left
-                        dotsBuilder(index, context),
-                      ],
-                    ),
+                      ),
+                      Spacer(),
+                      // dots builder at the bottom left
+                      dotsBuilder(index, context),
+                    ],
                   ),
-                );
-              },
-              enableSideReveal: (page == 3) ? false : true,
-              positionSlideIcon: 0.8,
-              slideIconWidget: (page == 3)
-                  ? Container()
-                  : Stack(
-                      children: [
-                        Icon(Icons.arrow_back_ios),
-                      ],
-                    ),
-              onPageChangeCallback: pageChangeCallback,
-              waveType: WaveType.liquidReveal,
-              liquidController: liquidController,
-              ignoreUserGestureWhileAnimating: true,
-              enableLoop: false,
-            ),
-          ],
-        ),
+                ),
+              );
+            },
+            enableSideReveal: (page == 3) ? false : true,
+            positionSlideIcon: 0.8,
+            slideIconWidget: (page == 3)
+                ? Container()
+                : Stack(
+                    children: [
+                      Icon(Icons.arrow_back_ios),
+                    ],
+                  ),
+            onPageChangeCallback: pageChangeCallback,
+            waveType: WaveType.liquidReveal,
+            liquidController: liquidController,
+            ignoreUserGestureWhileAnimating: true,
+            enableLoop: false,
+          ),
+        ],
       ),
     );
   }

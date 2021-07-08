@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:idreamcare/feature/authentication/screens/otpscreen/widgets/widget.dart';
+import 'package:idreamcare/feature/authentication/screens/phoneauth/firebasedb/firebase_db.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({Key? key, this.contactNumber}) : super(key: key);
+  const OtpScreen({Key? key, this.contactNumber, this.verificationUSerId})
+      : super(key: key);
   final String? contactNumber;
+  final String? verificationUSerId;
 
   @override
   _OtpScreenState createState() => _OtpScreenState();
@@ -16,6 +20,8 @@ class _OtpScreenState extends State<OtpScreen> {
   String otpPin = "858585";
   String otpText = "";
   bool isCorrect = false;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseRepository appUser = FirebaseRepository();
 
   @override
   void initState() {
@@ -73,14 +79,26 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
             textFieldAlignment: MainAxisAlignment.spaceAround,
             fieldStyle: FieldStyle.underline,
-            onCompleted: (pin) {
-              if (pin == otpPin) {
-                setState(() {
-                  isCorrect = true;
-                });
+            onCompleted: (pin) async {
+              AuthCredential credential = PhoneAuthProvider.credential(
+                  verificationId: widget.verificationUSerId ?? "",
+                  smsCode: pin.trim());
+              UserCredential result =
+                  await auth.signInWithCredential(credential);
+              User? user = result.user;
+              if (user != null) {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => Homescreen()));
+                  MaterialPageRoute(
+                    builder: (context) => Homescreen(),
+                  ),
+                );
+              } else {
+                print("error");
               }
+              appUser.setData(widget.contactNumber);
+              setState(() {
+                isCorrect = true;
+              });
             },
           ),
         ),

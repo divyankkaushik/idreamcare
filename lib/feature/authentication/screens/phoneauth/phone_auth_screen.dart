@@ -1,4 +1,6 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:idreamcare/constants/constants.dart';
+import 'package:idreamcare/feature/authentication/screens/phoneauth/provider/phone_auth_provider.dart';
 import 'package:idreamcare/feature/authentication/screens/phoneauth/widgets/widget.dart';
 
 class PhoneAuthScreen extends StatefulWidget {
@@ -15,6 +17,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   HapticFeedback? hapticFeedback;
 
   TextEditingController _controller = new TextEditingController();
+  final phoneAuthentication = PhoneAuthentication();
+  String countryCodeNumber = "";
 
   @override
   void initState() {
@@ -38,7 +42,8 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    Color textfieldBorderColor = (textIsEmplty) ? AppColors.errorColor : AppColors.primaryBlueColor;
+    Color textfieldBorderColor =
+        (textIsEmplty) ? AppColors.errorColor : AppColors.primaryBlueColor;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
@@ -78,7 +83,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
               (textIsEmplty)
                   ?
                   // shows error Container
-                   Align(
+                  Align(
                       alignment: Alignment.center,
                       child: Container(
                         width: 250,
@@ -96,21 +101,22 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
                   : (_controller.text.length < 10)
                       ?
                       // shows loading lottie file
-                       LottieFiles()
+                      LottieFiles()
                       : (_controller.text.length == 10)
                           ?
                           // Navigation to Otp Page Button
-                           Align(
+                          Align(
                               alignment: Alignment.center,
                               child: InkWell(
                                 onTap: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => OtpScreen(
-                                        contactNumber: _controller.text,
-                                      ),
-                                    ),
-                                  );
+                                  setState(() {
+                                    phoneAuthentication.phoneNumber =
+                                        _controller.text.trim();
+                                  });
+                                  phoneAuthentication.loginUser(
+                                      countryCodeNumber +
+                                          phoneAuthentication.phoneNumber!,
+                                      context);
                                 },
                                 child: Container(
                                   height: 60,
@@ -141,7 +147,7 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
               ),
               Spacer(),
               // more login option at the bottom of the screen
-            MoreLoginOption(),
+              MoreLoginOption(),
               SizedBox(
                 height: 10.0,
               )
@@ -152,56 +158,65 @@ class _PhoneAuthScreenState extends State<PhoneAuthScreen> {
     );
   }
 
+  void _onCountryChange(CountryCode? countryCode) {
+    this.countryCodeNumber = countryCode.toString();
+    print(countryCode);
+  }
+
 //  phoneNumber TextField
   Align phoneNumberTextField(Color textfieldBorderColor) {
     return Align(
-              alignment: Alignment.center,
-              child: Container(
-                width: 200.0,
-                height: 30.0,
-                child: Center(
-                  child: Row(
-                    children: [
-                      Text(
-                        "+91",
-                        style: TextStyle(fontSize: 30.0),
-                      ),
-                      SizedBox(
-                        width: 20.0,
-                      ),
-                      Expanded(
-                          child: TextField(
-                        controller: _controller,
-                        onChanged: (value) {
-                          if (value.isEmpty || value.length > 10) {
-                            setState(() {
-                              textIsEmplty = true;
-                              hapticFeedback?.errorVibration();
-                            });
-                          }
-                        },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          hintText: "Enter Here",
-                          focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: textfieldBorderColor)),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: textfieldBorderColor),
-                          ),
-                          border: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: textfieldBorderColor),
-                          ),
-                        ),
-                      ))
-                    ],
+      alignment: Alignment.center,
+      child: Container(
+        width: 200.0,
+        height: 50.0,
+        child: Center(
+          child: Row(
+            children: [
+              Container(
+                  width: 60.0,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                  ),
+                  child: CountryCodePicker(
+                    onChanged: _onCountryChange,
+                    onInit: _onCountryChange,
+                    initialSelection: "IN",
+                    showFlagMain: false,
+                    alignLeft: true,
                   ),
                 ),
+              SizedBox(
+                width: 20.0,
               ),
-            );
+              Expanded(
+                  child: TextField(
+                controller: _controller,
+                onChanged: (value) {
+                  if (value.isEmpty || value.length > 10) {
+                    setState(() {
+                      textIsEmplty = true;
+                      hapticFeedback?.errorVibration();
+                    });
+                  }
+                },
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: "Enter Here",
+                  focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: textfieldBorderColor)),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: textfieldBorderColor),
+                  ),
+                  border: UnderlineInputBorder(
+                    borderSide: BorderSide(color: textfieldBorderColor),
+                  ),
+                ),
+              ))
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
-
-

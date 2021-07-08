@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:idreamcare/constants/constants.dart';
 import 'package:idreamcare/feature/authentication/screens/landingscreen/widgets/widget.dart';
+import 'package:idreamcare/feature/authentication/screens/phoneauth/provider/phone_auth_provider.dart';
 
 // ignore: must_be_immutable
 class CustomDrawer extends StatefulWidget {
@@ -17,6 +18,7 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  PhoneAuthentication phoneAuthentication = PhoneAuthentication();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,6 +37,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Text("Career Assessment"),
                   ElevatedButton(
                       onPressed: () {
+                        phoneAuthentication.logOutUser();
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (contetx) => PhoneAuthScreen()));
                       },

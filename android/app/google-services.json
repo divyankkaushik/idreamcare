@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "19901843444",
+    "project_id": "i-dream-care",
+    "storage_bucket": "i-dream-care.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19901843444:android:3ce7c4ff2cb3579f0e5ba1",
+        "android_client_info": {
+          "package_name": "com.example.idreamcare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "19901843444-5ao79rnsud9106up1em2aqp2aeqvctjg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG9oimcQP3bGcMZT7dP95vTuYzEQdeQ5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "19901843444-5ao79rnsud9106up1em2aqp2aeqvctjg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
